@@ -22,7 +22,7 @@ export default function Header() {
 
   const navItems = [
     { label: 'Products', href: '/products' },
-    { label: 'Categories', href: '/products' },
+    { label: 'Blog', href: '/blog' },
     { label: 'About', href: '/about' },
     { label: 'Contact', href: '/contact' }
   ];
