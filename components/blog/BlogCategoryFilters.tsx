@@ -14,27 +14,30 @@ const categoryColors: Record<string, string> = {
 }
 
 export default function BlogCategoryFilters({ categories, activeCategory, onCategoryChange }: BlogCategoryFiltersProps) {
-  const allCategories = ['All', ...categories.map((c) => c.name)]
+  // Create array with 'All' option and categories, using unique keys
+  const categoryOptions = [
+    { name: 'All', slug: 'all' },
+    ...categories
+  ]
 
   return (
     <div className="flex flex-wrap justify-center gap-3 mb-12">
-      {allCategories.map((category) => {
-        const isActive = activeCategory === category || (category === 'All' && !activeCategory)
-        const categorySlug = category === 'All' ? null : categories.find((c) => c.name === category)?.slug ?? null
+      {categoryOptions.map((category) => {
+        const isActive = activeCategory === category.slug || (category.slug === 'all' && !activeCategory)
 
         return (
           <motion.button
-            key={category}
-            onClick={() => onCategoryChange(categorySlug)}
+            key={category.slug} // Use slug as unique key
+            onClick={() => onCategoryChange(category.slug === 'all' ? null : category.slug)}
             className={`px-6 py-2.5 rounded-full font-semibold text-sm transition-all duration-300 ${
               isActive
-                ? categoryColors[category] || categoryColors.default
+                ? categoryColors[category.name] || categoryColors.default
                 : categoryColors.default
             }`}
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
-            {category}
+            {category.name}
           </motion.button>
         )
       })}
