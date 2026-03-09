@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useEffect } from "react";
-import { Phone } from "lucide-react";
+import { Phone, Package } from "lucide-react";
 
 interface MobileNavProps {
   isOpen: boolean;
@@ -35,6 +35,21 @@ export default function MobileNav({ isOpen, onClose }: MobileNavProps) {
       {/* Mobile Menu */}
       <div className="fixed inset-y-0 left-0 z-[55] w-full max-w-sm bg-bg-elevated shadow-xl">
         <div className="flex flex-col h-full pt-20">
+          
+          {/* Logo inside Drawer */}
+          <div className="px-6 pb-6 pt-2 border-b border-border-subtle">
+            <Link href="/" onClick={onClose} className="flex items-center gap-3 group">
+              <div className="relative h-10 w-10 sm:h-12 sm:w-12 rounded-xl sm:rounded-2xl bg-gradient-to-br from-brand-primary to-brand-medium shadow-lg shadow-brand-primary/20 flex items-center justify-center overflow-hidden transition-transform duration-500 group-hover:scale-105">
+                <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 mix-blend-overlay"></div>
+                <Package className="w-5 h-5 sm:w-6 sm:h-6 text-white absolute transform group-hover:-translate-y-10 transition-transform duration-500 ease-in-out" />
+                <span className="text-white font-bold text-xl sm:text-2xl leading-none absolute transform translate-y-10 group-hover:translate-y-0 transition-transform duration-500 ease-in-out">N</span>
+              </div>
+              <span className="font-heading font-bold text-xl sm:text-2xl text-brand-primary tracking-tight">
+                NextLevel<span className="text-brand-accent">.</span>
+              </span>
+            </Link>
+          </div>
+
           {/* Navigation Links */}
           <nav className="flex-1 px-4 py-6 space-y-4 overflow-y-auto">
             <Link
