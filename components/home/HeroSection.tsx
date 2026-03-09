@@ -129,7 +129,7 @@ export default function HeroSection() {
                    src="/images/hero-boxes.png" 
                    alt="Premium Packaging Solutions" 
                    fill 
-                   className="object-cover object-right opacity-90 group-hover:scale-105 transition-transform duration-700"
+                   className="object-cover opacity-90 group-hover:scale-105 transition-transform duration-700"
                    priority
                  />
                  {/* Dark overlay for text readability */}
