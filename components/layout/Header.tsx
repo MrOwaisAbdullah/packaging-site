@@ -3,10 +3,16 @@
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { motion, useScroll, AnimatePresence } from "framer-motion";
-import { Phone, Menu, X, Package } from "lucide-react";
+import { Phone, Menu, X, Package, ChevronDown } from "lucide-react";
 import MobileNav from "./MobileNav";
 
-export default function Header() {
+import { Category } from "@/lib/types";
+
+interface HeaderProps {
+  categories: Category[];
+}
+
+export default function Header({ categories }: HeaderProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeItem, setActiveItem] = useState<string | null>(null);
 
@@ -21,7 +27,7 @@ export default function Header() {
   }, [scrollY]);
 
   const navItems = [
-    { label: 'Products', href: '/products' },
+    { label: 'Products', href: '/products', hasDropdown: true },
     { label: 'Blog', href: '/blog' },
     { label: 'About', href: '/about' },
     { label: 'Contact', href: '/contact' }
@@ -60,24 +66,71 @@ export default function Header() {
             <nav className="hidden md:flex items-center justify-center absolute inset-0 pointer-events-none">
               <div className={`flex space-x-1 p-1 rounded-full pointer-events-auto transition-all duration-500 ${isScrolled ? 'bg-bg-subtle/50 backdrop-blur-md border border-border-subtle/50' : 'bg-transparent border-transparent'}`}>
                 {navItems.map((item) => (
-                  <Link
+                  <div
                     key={item.label}
-                    href={item.href}
                     onMouseEnter={() => setActiveItem(item.label)}
                     onMouseLeave={() => setActiveItem(null)}
-                    className="relative px-5 py-2.5 text-sm font-semibold rounded-full transition-colors z-10"
+                    className="relative"
                   >
-                    <span className={`relative z-10 transition-colors duration-300 ${activeItem === item.label ? 'text-white' : 'text-brand-primary'}`}>
-                      {item.label}
-                    </span>
-                    {activeItem === item.label && (
-                      <motion.div
-                        layoutId="nav-pill"
-                        className="absolute inset-0 bg-brand-primary rounded-full -z-0"
-                        transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
-                      />
+                    <Link
+                      href={item.href}
+                      className="relative px-5 py-2.5 text-sm font-semibold rounded-full transition-colors z-10 flex items-center gap-1.5"
+                    >
+                      <span className={`relative z-10 transition-colors duration-300 ${activeItem === item.label ? 'text-white' : 'text-brand-primary'}`}>
+                        {item.label}
+                      </span>
+                      {item.hasDropdown && (
+                        <ChevronDown className={`w-4 h-4 relative z-10 transition-transform duration-300 ${activeItem === item.label ? 'text-white rotate-180' : 'text-brand-primary'}`} />
+                      )}
+                      {activeItem === item.label && (
+                        <motion.div
+                          layoutId="nav-pill"
+                          className="absolute inset-0 bg-brand-primary rounded-full -z-0 shadow-lg shadow-brand-primary/10"
+                          transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+                        />
+                      )}
+                    </Link>
+
+                    {/* Dropdown Menu */}
+                    {item.hasDropdown && (
+                      <AnimatePresence>
+                        {activeItem === item.label && (
+                          <motion.div
+                            initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                            animate={{ opacity: 1, y: 0, scale: 1 }}
+                            exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                            transition={{ duration: 0.2, ease: "easeOut" }}
+                            className="absolute top-full left-1/2 -translate-x-1/2 pt-4 w-[280px] pointer-events-auto"
+                          >
+                            <div className="bg-white border border-border-subtle rounded-2xl shadow-2xl p-3 overflow-hidden">
+                              <div className="grid grid-cols-1 gap-1">
+                                <Link
+                                  href="/products"
+                                  onClick={() => setActiveItem(null)}
+                                  className="group flex items-center justify-between px-3.5 py-2.5 rounded-xl hover:bg-brand-primary/5 transition-all duration-300"
+                                >
+                                  <span className="text-sm font-bold text-brand-primary">All Products</span>
+                                  <div className="w-1.5 h-1.5 rounded-full bg-brand-accent scale-50 opacity-0 group-hover:scale-100 group-hover:opacity-100 transition-all duration-300" />
+                                </Link>
+                                <div className="h-px bg-border-subtle mx-2 my-1" />
+                                {categories?.map((cat) => (
+                                  <Link
+                                    key={cat._id}
+                                    href={`/products/${cat.slug}`}
+                                    onClick={() => setActiveItem(null)}
+                                    className="group flex items-center justify-between px-3.5 py-2.5 rounded-xl hover:bg-brand-primary/5 transition-all duration-300"
+                                  >
+                                    <span className="text-sm font-medium text-text-secondary group-hover:text-brand-primary group-hover:font-semibold transition-colors">{cat.name}</span>
+                                    <div className="w-1.5 h-1.5 rounded-full bg-brand-accent scale-50 opacity-0 group-hover:scale-100 group-hover:opacity-100 transition-all duration-300" />
+                                  </Link>
+                                ))}
+                              </div>
+                            </div>
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
                     )}
-                  </Link>
+                  </div>
                 ))}
               </div>
             </nav>
@@ -130,7 +183,11 @@ export default function Header() {
       </motion.header>
 
       {/* Mobile Navigation Dropdown */}
-      <MobileNav isOpen={mobileMenuOpen} onClose={() => setMobileMenuOpen(false)} />
+      <MobileNav 
+        isOpen={mobileMenuOpen} 
+        onClose={() => setMobileMenuOpen(false)} 
+        categories={categories}
+      />
     </>
   );
 }

@@ -1,15 +1,18 @@
 ﻿"use client";
 
 import Link from "next/link";
-import { useEffect } from "react";
-import { Phone, Package } from "lucide-react";
+import { useEffect, useState } from "react";
+import { Category } from "@/lib/types";
+import { Phone, Package, ChevronDown, ChevronRight } from "lucide-react";
 
 interface MobileNavProps {
   isOpen: boolean;
   onClose: () => void;
+  categories: Category[];
 }
 
-export default function MobileNav({ isOpen, onClose }: MobileNavProps) {
+export default function MobileNav({ isOpen, onClose, categories }: MobileNavProps) {
+  const [isProductsOpen, setIsProductsOpen] = useState(false);
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = "hidden";
@@ -52,13 +55,42 @@ export default function MobileNav({ isOpen, onClose }: MobileNavProps) {
 
           {/* Navigation Links */}
           <nav className="flex-1 px-4 py-6 space-y-4 overflow-y-auto">
-            <Link
-              href="/products"
-              onClick={onClose}
-              className="block py-3 px-4 text-base font-medium text-text-secondary hover:text-text-primary hover:bg-bg-subtle rounded-lg transition-colors"
-            >
-              Products
-            </Link>
+            {/* Products with Sub-menu */}
+            <div className="space-y-1">
+              <button
+                onClick={() => setIsProductsOpen(!isProductsOpen)}
+                className="flex items-center justify-between w-full py-3 px-4 text-base font-semibold text-brand-primary hover:bg-bg-subtle rounded-xl transition-all duration-300"
+              >
+                <span className="flex items-center gap-3">
+                  <Package className="w-5 h-5 text-brand-accent" />
+                  Products
+                </span>
+                <ChevronDown className={`w-5 h-5 transition-transform duration-500 ${isProductsOpen ? 'rotate-180' : ''}`} />
+              </button>
+              
+              <div className={`overflow-hidden transition-all duration-500 ease-in-out ${isProductsOpen ? 'max-h-[500px] opacity-100 mt-2' : 'max-h-0 opacity-0'}`}>
+                <div className="pl-12 pr-4 space-y-1 border-l-2 border-border-subtle ml-6">
+                  <Link
+                    href="/products"
+                    onClick={onClose}
+                    className="block py-2.5 px-4 text-sm font-bold text-brand-primary hover:text-brand-accent transition-colors"
+                  >
+                    View All Catalog
+                  </Link>
+                  {categories?.map((cat) => (
+                    <Link
+                      key={cat._id}
+                      href={`/products/${cat.slug}`}
+                      onClick={onClose}
+                      className="block py-2.5 px-4 text-sm font-medium text-text-secondary hover:text-brand-primary transition-colors flex items-center justify-between group"
+                    >
+                      {cat.name}
+                      <ChevronRight className="w-4 h-4 opacity-0 group-hover:opacity-100 -translate-x-2 group-hover:translate-x-0 transition-all duration-300" />
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            </div>
             <Link
               href="/blog"
               onClick={onClose}

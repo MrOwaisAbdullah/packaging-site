@@ -104,14 +104,17 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const settings = await getSettings()
+  const [settings, categories] = await Promise.all([
+    getSettings(),
+    import("@/lib/sanity").then(mod => mod.getCategories())
+  ])
 
   return (
     <html lang="en" className={`${outfit.variable} ${plusJakartaSans.variable}`}>
       <body className="font-body min-h-screen flex flex-col">
         <OrganizationJsonLd settings={settings} />
         <Analytics />
-        <Header />
+        <Header categories={categories} />
         <main className="flex-1 pt-[100px]">{children}</main>
         <Footer />
         <WhatsAppFloat />
