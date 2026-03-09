@@ -43,8 +43,8 @@ export async function sanityFetch<T>(
   }
 
   return client.fetch<T>(query, params || {}, {
-    cache: 'force-cache',
     next: {
+      revalidate: 3600, // Revalidate every hour
       tags,
     },
   })

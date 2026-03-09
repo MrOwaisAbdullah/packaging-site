@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EcoGlow Theme Showcase</title>
+  <style>
+    /* Import the EcoGlow theme styles */
+    :root {
+      --ecoglow-lime: #a3e635;
+      --ecoglow-lime-dark: #84cc16;
+      --ecoglow-black: #18181b;
+      --ecoglow-bg: #ffffff;
+      --ecoglow-fg: #09090b;
+      --ecoglow-card: #ffffff;
+      --ecoglow-border: #e4e4e7;
+      --ecoglow-muted: #f4f4f5;
+      --ecoglow-muted-fg: #71717a;
+      --ecoglow-radius: 8px;
+      --ecoglow-radius-lg: 12px;
+      --ecoglow-shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+      --ecoglow-shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+      --ecoglow-shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+      --ecoglow-shadow-lime: 0 10px 15px -3px rgb(163 230 53 / 0.25);
+      --ecoglow-transition: all 0.2s ease;
+    }
+
+    .dark {
+      --ecoglow-bg: #09090b;
+      --ecoglow-fg: #fafafa;
+      --ecoglow-card: #09090b;
+      --ecoglow-border: #27272a;
+      --ecoglow-muted: #27272a;
+      --ecoglow-muted-fg: #a1a1aa;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background-color: var(--ecoglow-bg);
+      color: var(--ecoglow-fg);
+      line-height: 1.6;
+      padding: 2rem;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    /* Header */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 3rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--ecoglow-border);
+    }
+    h1 { font-size: 2rem; font-weight: 900; letter-spacing: -0.05em; }
+    .logo { display: flex; align-items: center; gap: 0.5rem; }
+    .logo-dot { width: 12px; height: 12px; background: var(--ecoglow-lime); border-radius: 50%; }
+
+    /* Dark Mode Toggle */
+    .theme-toggle {
+      padding: 0.5rem 1rem;
+      border-radius: var(--ecoglow-radius);
+      background: var(--ecoglow-muted);
+      border: none;
+      cursor: pointer;
+      font-weight: 600;
+      transition: var(--ecoglow-transition);
+    }
+    .theme-toggle:hover { background: var(--ecoglow-border); }
+
+    /* Section */
+    section { margin-bottom: 3rem; }
+    section h2 {
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      color: var(--ecoglow-muted-fg);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      font-size: 0.75rem;
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 0.75rem 1.5rem;
+      border-radius: var(--ecoglow-radius-lg);
+      font-weight: 700;
+      font-size: 0.875rem;
+      border: none;
+      cursor: pointer;
+      transition: var(--ecoglow-transition);
+    }
+    .btn:focus-visible { outline: 2px solid var(--ecoglow-lime); outline-offset: 2px; }
+    .btn-primary { background: var(--ecoglow-lime); color: var(--ecoglow-black); box-shadow: var(--ecoglow-shadow-lime); }
+    .btn-primary:hover { background: var(--ecoglow-lime-dark); }
+    .btn-secondary { background: var(--ecoglow-muted); color: var(--ecoglow-fg); }
+    .btn-secondary:hover { opacity: 0.8; }
+    .btn-outline { background: transparent; border: 2px solid var(--ecoglow-border); color: var(--ecoglow-fg); }
+    .btn-outline:hover { background: rgba(163, 230, 53, 0.1); border-color: var(--ecoglow-lime); }
+    .btn-ghost { background: transparent; color: var(--ecoglow-fg); }
+    .btn-ghost:hover { background: var(--ecoglow-muted); }
+    .btn-destructive { background: rgba(239, 68, 68, 0.1); color: #ef4444; }
+    .btn-destructive:hover { background: rgba(239, 68, 68, 0.2); }
+    .btn-sm { padding: 0.5rem 1rem; font-size: 0.75rem; }
+    .btn-lg { padding: 1rem 2rem; font-size: 1rem; }
+    .btn-icon { width: 2.75rem; padding: 0; }
+
+    /* Button Grid */
+    .button-grid { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+
+    /* Cards */
+    .card {
+      background: var(--ecoglow-card);
+      border: 1px solid var(--ecoglow-border);
+      border-radius: var(--ecoglow-radius);
+      padding: 1.5rem;
+      box-shadow: var(--ecoglow-shadow-sm);
+      transition: var(--ecoglow-transition);
+    }
+    .card:hover { box-shadow: var(--ecoglow-shadow-md); transform: translateY(-2px); }
+    .card-header { display: flex; flex-direction: column; gap: 0.375rem; margin-bottom: 1rem; }
+    .card-title { font-size: 1.5rem; font-weight: 600; letter-spacing: -0.025em; }
+    .card-desc { font-size: 0.875rem; color: var(--ecoglow-muted-fg); }
+    .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; }
+
+    /* Stat Card */
+    .stat {
+      background: var(--ecoglow-card);
+      border: 1px solid var(--ecoglow-border);
+      border-radius: var(--ecoglow-radius);
+      padding: 1.25rem;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 1rem;
+      box-shadow: var(--ecoglow-shadow-sm);
+      transition: var(--ecoglow-transition);
+    }
+    .stat:hover { box-shadow: var(--ecoglow-shadow-md); transform: translateY(-2px); }
+    .stat-value { font-size: 2rem; font-weight: 900; letter-spacing: -0.05em; }
+    .stat-label { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--ecoglow-muted-fg); }
+    .stat-icon {
+      width: 40px; height: 40px;
+      padding: 0.625rem;
+      border-radius: var(--ecoglow-radius-lg);
+      background: var(--ecoglow-black);
+      color: var(--ecoglow-lime);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .dark .stat-icon { background: var(--ecoglow-lime); color: var(--ecoglow-black); }
+    .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; }
+
+    /* Badges */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.25rem 0.75rem;
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+    .badge-lime { background: rgba(163, 230, 53, 0.15); color: rgb(132 204 22); }
+    .badge-green { background: rgba(34, 197, 94, 0.15); color: rgb(21 128 61); }
+    .badge-yellow { background: rgba(234, 179, 8, 0.15); color: rgb(161 98 7); }
+    .badge-red { background: rgba(239, 68, 68, 0.15); color: rgb(185 28 28); }
+    .dark .badge-lime { background: rgba(163, 230, 53, 0.2); color: #a3e635; }
+    .dark .badge-green { background: rgba(20, 83, 45, 0.3); color: #4ade80; }
+    .dark .badge-yellow { background: rgba(161, 98, 7, 0.3); color: #facc15; }
+    .dark .badge-red { background: rgba(127, 29, 29, 0.3); color: #f87171; }
+
+    /* Inputs */
+    .input {
+      width: 100%;
+      max-width: 400px;
+      padding: 0.75rem 1rem;
+      border: 1px solid var(--ecoglow-border);
+      border-radius: 6px;
+      background: var(--ecoglow-bg);
+      color: var(--ecoglow-fg);
+      font-size: 0.875rem;
+      transition: var(--ecoglow-transition);
+    }
+    .input:focus { outline: none; border-color: var(--ecoglow-lime); box-shadow: 0 0 0 2px rgba(163, 230, 53, 0.2); }
+
+    /* Sidebar (demo) */
+    .sidebar-demo {
+      width: 280px;
+      background: var(--ecoglow-black);
+      color: #fafafa;
+      padding: 1rem;
+      border-radius: var(--ecoglow-radius);
+    }
+    .sidebar-link {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.75rem;
+      border-radius: var(--ecoglow-radius);
+      color: #a1a1aa;
+      text-decoration: none;
+      transition: var(--ecoglow-transition);
+      margin-bottom: 0.25rem;
+    }
+    .sidebar-link:hover { background: #27272a; color: #fafafa; }
+    .sidebar-link.active { background: var(--ecoglow-lime); color: var(--ecoglow-black); font-weight: 600; }
+
+    /* Palette */
+    .palette { display: flex; flex-wrap: wrap; gap: 1rem; }
+    .palette-swatch {
+      width: 100px; height: 100px;
+      border-radius: var(--ecoglow-radius);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+
+    /* Icons */
+    .icon { width: 20px; height: 20px; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">
+      <div class="logo-dot"></div>
+      <h1>EcoGlow Theme</h1>
+    </div>
+    <button class="theme-toggle" onclick="document.documentElement.classList.toggle('dark')">
+      Toggle Dark Mode
+    </button>
+  </header>
+
+  <section>
+    <h2>Color Palette</h2>
+    <div class="palette">
+      <div class="palette-swatch" style="background: #a3e635; color: #18181b;">
+        <span>Lime</span>
+        <span>#a3e635</span>
+      </div>
+      <div class="palette-swatch" style="background: #18181b; color: #fafafa;">
+        <span>Black</span>
+        <span>#18181b</span>
+      </div>
+      <div class="palette-swatch" style="background: #ffffff; border: 1px solid #e4e4e7; color: #09090b;">
+        <span>White</span>
+        <span>#ffffff</span>
+      </div>
+      <div class="palette-swatch" style="background: #71717a; color: #ffffff;">
+        <span>Muted</span>
+        <span>#71717a</span>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Buttons</h2>
+    <div class="button-grid">
+      <button class="btn btn-primary">Primary Action</button>
+      <button class="btn btn-secondary">Secondary</button>
+      <button class="btn btn-outline">Outline</button>
+      <button class="btn btn-ghost">Ghost</button>
+      <button class="btn btn-destructive">Delete</button>
+      <button class="btn btn-primary btn-sm">Small</button>
+      <button class="btn btn-primary btn-lg">Large</button>
+      <button class="btn btn-primary btn-icon">+</button>
+    </div>
+  </section>
+
+  <section>
+    <h2>Stat Cards</h2>
+    <div class="stat-grid">
+      <div class="stat">
+        <div>
+          <p class="stat-label">Total Tasks</p>
+          <p class="stat-value">248</p>
+        </div>
+        <div class="stat-icon">
+          <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path></svg>
+        </div>
+      </div>
+      <div class="stat">
+        <div>
+          <p class="stat-label">Active Projects</p>
+          <p class="stat-value">12</p>
+        </div>
+        <div class="stat-icon">
+          <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"></path></svg>
+        </div>
+      </div>
+      <div class="stat">
+        <div>
+          <p class="stat-label">Team Members</p>
+          <p class="stat-value">8</p>
+        </div>
+        <div class="stat-icon">
+          <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Cards</h2>
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">Project Alpha</h3>
+          <p class="card-desc">Website redesign for tech startup</p>
+        </div>
+        <div style="margin-bottom: 1rem;">
+          <span class="badge badge-lime">In Progress</span>
+        </div>
+        <input class="input" type="text" placeholder="Add a task...">
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">Project Beta</h3>
+          <p class="card-desc">Mobile app development</p>
+        </div>
+        <div style="margin-bottom: 1rem;">
+          <span class="badge badge-yellow">On Hold</span>
+        </div>
+        <p class="card-desc">Waiting for client approval</p>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">Project Gamma</h3>
+          <p class="card-desc">Marketing campaign launch</p>
+        </div>
+        <div style="margin-bottom: 1rem;">
+          <span class="badge badge-green">Completed</span>
+        </div>
+        <p class="card-desc">Delivered ahead of schedule</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Status Badges</h2>
+    <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+      <span class="badge badge-lime">Active</span>
+      <span class="badge badge-green">Done</span>
+      <span class="badge badge-yellow">Pending</span>
+      <span class="badge badge-red">Overdue</span>
+    </div>
+  </section>
+
+  <section>
+    <h2>Sidebar (Always Dark)</h2>
+    <div class="sidebar-demo">
+      <a href="#" class="sidebar-link active">Dashboard</a>
+      <a href="#" class="sidebar-link">Projects</a>
+      <a href="#" class="sidebar-link">Tasks</a>
+      <a href="#" class="sidebar-link">Team</a>
+      <a href="#" class="sidebar-link">Settings</a>
+    </div>
+  </section>
+
+  <section>
+    <h2>Form Elements</h2>
+    <div style="display: flex; flex-direction: column; gap: 1rem; max-width: 400px;">
+      <input class="input" type="text" placeholder="Enter your name">
+      <input class="input" type="email" placeholder="your@email.com">
+      <select class="input">
+        <option>Select an option</option>
+        <option>Option 1</option>
+        <option>Option 2</option>
+      </select>
+    </div>
+  </section>
+</body>
+</html>

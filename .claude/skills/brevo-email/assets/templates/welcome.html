@@ -1,0 +1,87 @@
+<!-- Welcome / Onboarding Email — Light Theme -->
+<!-- Replace placeholders: {{BRAND_NAME}}, {{SITE_URL}}, {{FIRSTNAME}}, {{DASHBOARD_URL}}, {{DOCS_URL}} -->
+<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Welcome to {{BRAND_NAME}}</title>
+</head>
+<body style="margin:0;padding:0;background:#f0f2f5;font-family:'Segoe UI',Arial,sans-serif;">
+  <div style="max-width:600px;margin:0 auto;padding:24px;">
+
+    <!-- Hero Header — gradient accent strip on dark -->
+    <div style="background:#0d1117;border-radius:12px 12px 0 0;padding:48px 30px 36px;text-align:center;position:relative;overflow:hidden;">
+      <!-- Decorative top accent line -->
+      <div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#64F4AB,#FECD1A,#64F4AB);"></div>
+      <!-- Brand badge -->
+      <div style="display:inline-block;background:rgba(100,244,171,0.12);border:1px solid rgba(100,244,171,0.4);border-radius:50px;padding:6px 18px;margin-bottom:20px;">
+        <span style="color:#64F4AB;font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;">{{BRAND_NAME}}</span>
+      </div>
+      <h1 style="color:#ffffff;margin:0 0 12px;font-size:28px;font-weight:800;line-height:1.2;">Welcome aboard, {{FIRSTNAME}}! &#127881;</h1>
+      <p style="color:#8b949e;margin:0;font-size:15px;line-height:1.6;">Your account is ready. Let&apos;s get you started.</p>
+    </div>
+
+    <!-- White content -->
+    <div style="background:#ffffff;border-left:1px solid #e1e4e8;border-right:1px solid #e1e4e8;padding:36px 28px;">
+
+      <!-- Greeting -->
+      <p style="color:#24292f;font-size:16px;line-height:1.8;margin:0 0 28px;">
+        We&apos;re thrilled to have you here. Your account has been created and everything
+        is set up and ready to go. Here&apos;s what you can do next:
+      </p>
+
+      <!-- 3-step card row -->
+      <table style="width:100%;border-collapse:collapse;margin-bottom:28px;">
+        <tr>
+          <td style="width:33%;padding:4px;" valign="top">
+            <div style="background:#f6f8fa;border-radius:10px;border:1px solid #e1e4e8;padding:16px 12px;text-align:center;">
+              <div style="font-size:24px;margin-bottom:8px;">&#9881;&#65039;</div>
+              <p style="color:#24292f;font-size:13px;font-weight:700;margin:0 0 4px;">Set Up Profile</p>
+              <p style="color:#656d76;font-size:12px;margin:0;line-height:1.5;">Complete your account details</p>
+            </div>
+          </td>
+          <td style="width:33%;padding:4px;" valign="top">
+            <div style="background:#f6f8fa;border-radius:10px;border:1px solid #e1e4e8;padding:16px 12px;text-align:center;">
+              <div style="font-size:24px;margin-bottom:8px;">&#128218;</div>
+              <p style="color:#24292f;font-size:13px;font-weight:700;margin:0 0 4px;">Read the Docs</p>
+              <p style="color:#656d76;font-size:12px;margin:0;line-height:1.5;">Get up to speed quickly</p>
+            </div>
+          </td>
+          <td style="width:33%;padding:4px;" valign="top">
+            <div style="background:#f6f8fa;border-radius:10px;border:1px solid #e1e4e8;padding:16px 12px;text-align:center;">
+              <div style="font-size:24px;margin-bottom:8px;">&#128640;</div>
+              <p style="color:#24292f;font-size:13px;font-weight:700;margin:0 0 4px;">Launch First Project</p>
+              <p style="color:#656d76;font-size:12px;margin:0;line-height:1.5;">Start building right away</p>
+            </div>
+          </td>
+        </tr>
+      </table>
+
+      <!-- Primary CTA -->
+      <div style="text-align:center;margin-bottom:24px;">
+        <a href="{{DASHBOARD_URL}}"
+           style="display:inline-block;background:#FECD1A;color:#000000;padding:14px 36px;text-decoration:none;border-radius:50px;font-weight:800;font-size:15px;letter-spacing:0.3px;">
+          Go to Dashboard &#8594;
+        </a>
+      </div>
+
+      <!-- Secondary link -->
+      <p style="text-align:center;margin:0;">
+        <a href="{{DOCS_URL}}" style="color:#1a7f5a;font-size:13px;text-decoration:none;font-weight:600;">Browse documentation &#8599;</a>
+      </p>
+    </div>
+
+    <!-- Footer -->
+    <div style="background:#f6f8fa;border:1px solid #e1e4e8;border-top:0;border-radius:0 0 12px 12px;padding:20px 28px;text-align:center;">
+      <p style="color:#656d76;font-size:12px;margin:0 0 6px;">
+        Questions? Reply to this email or visit
+        <a href="{{SITE_URL}}" style="color:#1a7f5a;text-decoration:none;font-weight:600;">{{SITE_URL}}</a>
+      </p>
+      <p style="color:#8c949e;font-size:11px;margin:0;">
+        You received this because you created an account at {{BRAND_NAME}}.
+        <a href="#" style="color:#8c949e;">Unsubscribe</a>
+      </p>
+    </div>
+
+  </div>
+</body>
+</html>

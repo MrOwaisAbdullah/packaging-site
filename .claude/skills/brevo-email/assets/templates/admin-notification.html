@@ -1,0 +1,71 @@
+<!-- Admin Notification Email — Light Theme -->
+<!-- Replace: {{BRAND_NAME}}, ${safeName}, ${safeEmail}, ${safeSubject}, ${safeMessage}, {{SITE_NAME}} -->
+<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
+<body style="margin:0;padding:0;background:#f0f2f5;font-family:'Segoe UI',Arial,sans-serif;">
+  <div style="max-width:600px;margin:0 auto;padding:24px;">
+
+    <!-- Dark header banner -->
+    <div style="background:#0d1117;border-radius:12px 12px 0 0;padding:28px 30px;text-align:center;">
+      <div style="display:inline-block;background:rgba(100,244,171,0.15);border:1px solid #64F4AB;border-radius:6px;padding:4px 12px;margin-bottom:14px;">
+        <span style="color:#64F4AB;font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;">{{BRAND_NAME}} Contact</span>
+      </div>
+      <h1 style="color:#ffffff;margin:0;font-size:20px;font-weight:700;">New Message Received</h1>
+      <p style="color:#8b949e;margin:6px 0 0;font-size:13px;">Someone reached out via your portfolio</p>
+    </div>
+
+    <!-- White content area -->
+    <div style="background:#ffffff;border-left:1px solid #e1e4e8;border-right:1px solid #e1e4e8;padding:28px;">
+
+      <!-- Sender info table -->
+      <div style="background:#f6f8fa;border-radius:8px;padding:18px;margin-bottom:20px;border:1px solid #e1e4e8;">
+        <table style="width:100%;border-collapse:collapse;">
+          <tr>
+            <td style="padding:9px 0;border-bottom:1px solid #e1e4e8;width:90px;">
+              <span style="color:#1a7f5a;font-size:11px;font-weight:700;letter-spacing:0.8px;text-transform:uppercase;">From</span>
+            </td>
+            <td style="padding:9px 0;border-bottom:1px solid #e1e4e8;color:#24292f;font-size:14px;font-weight:500;">${safeName}</td>
+          </tr>
+          <tr>
+            <td style="padding:9px 0;border-bottom:1px solid #e1e4e8;">
+              <span style="color:#1a7f5a;font-size:11px;font-weight:700;letter-spacing:0.8px;text-transform:uppercase;">Email</span>
+            </td>
+            <td style="padding:9px 0;border-bottom:1px solid #e1e4e8;">
+              <a href="mailto:${safeEmail}" style="color:#0969da;text-decoration:none;font-size:14px;">${safeEmail}</a>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding:9px 0;">
+              <span style="color:#1a7f5a;font-size:11px;font-weight:700;letter-spacing:0.8px;text-transform:uppercase;">Subject</span>
+            </td>
+            <td style="padding:9px 0;color:#24292f;font-size:14px;">${safeSubject}</td>
+          </tr>
+        </table>
+      </div>
+
+      <!-- Message -->
+      <p style="color:#1a7f5a;font-size:11px;font-weight:700;letter-spacing:0.8px;text-transform:uppercase;margin:0 0 10px;">Message</p>
+      <div style="background:#f6f8fa;border-left:3px solid #64F4AB;border-radius:0 6px 6px 0;padding:14px 18px;color:#24292f;font-size:14px;line-height:1.7;">
+        ${safeMessage}
+      </div>
+
+      <!-- Reply CTA -->
+      <div style="margin-top:24px;text-align:center;">
+        <a href="mailto:${safeEmail}?subject=Re: ${safeSubject}"
+           style="display:inline-block;background:#FECD1A;color:#000000;padding:11px 30px;text-decoration:none;border-radius:50px;font-weight:700;font-size:14px;">
+          Reply to ${safeName} &#8594;
+        </a>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div style="background:#f6f8fa;border:1px solid #e1e4e8;border-top:0;border-radius:0 0 12px 12px;padding:14px 30px;text-align:center;">
+      <p style="color:#656d76;font-size:11px;margin:0;">
+        Received ${new Date().toLocaleString('en-US',{dateStyle:'long',timeStyle:'short'})} &middot; {{SITE_NAME}}
+      </p>
+    </div>
+
+  </div>
+</body>
+</html>

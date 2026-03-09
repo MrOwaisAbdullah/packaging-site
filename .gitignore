@@ -50,9 +50,9 @@ next-env.d.ts
 .DS_Store
 Thumbs.db
 
-.claude
-CLAUDE.md 
-specs
-history
-.specify
-module_prompts
+# .claude
+# CLAUDE.md 
+# specs
+# history
+# .specify
+# module_prompts

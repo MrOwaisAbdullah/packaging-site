@@ -4,7 +4,7 @@ import dynamic from "next/dynamic";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import OrganizationJsonLd from "@/components/seo/OrganizationJsonLd";
-import { getSettings } from "@/lib/sanity";
+import { getSettings, getCategories } from "@/lib/sanity";
 import "./globals.css";
 
 // Dynamically import components to avoid blocking hydration
@@ -106,7 +106,7 @@ export default async function RootLayout({
 }>) {
   const [settings, categories] = await Promise.all([
     getSettings(),
-    import("@/lib/sanity").then(mod => mod.getCategories())
+    getCategories()
   ])
 
   return (

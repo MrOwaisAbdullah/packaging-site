@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git mv:*)",
+      "mcp__tavily__tavily_search",
+      "mcp__tavily__tavily_extract",
+      "mcp__tavily__tavily_crawl",
+      "Bash(powershell:*)",
+      "mcp__context7__query-docs"
+    ]
+  }
+}

@@ -1,0 +1,103 @@
+<!-- Order Confirmation Email — Light Theme -->
+<!-- Replace: {{BRAND_NAME}}, {{SITE_URL}}, {{FIRSTNAME}}, {{ORDER_ID}}, {{ORDER_DATE}}, -->
+<!--          {{TRACKING_URL}}, {{SUPPORT_EMAIL}},                                         -->
+<!--          Item rows: {{ITEM_NAME}}, {{ITEM_QTY}}, {{ITEM_PRICE}},                    -->
+<!--          Totals: {{SUBTOTAL}}, {{SHIPPING}}, {{ORDER_TOTAL}}                         -->
+<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Order Confirmed — {{ORDER_ID}}</title>
+</head>
+<body style="margin:0;padding:0;background:#f0f2f5;font-family:'Segoe UI',Arial,sans-serif;">
+  <div style="max-width:600px;margin:0 auto;padding:24px;">
+
+    <!-- Header — green success tone -->
+    <div style="background:#0d1117;border-radius:12px 12px 0 0;padding:40px 30px;text-align:center;">
+      <!-- Success circle -->
+      <div style="width:68px;height:68px;background:rgba(100,244,171,0.12);border-radius:50%;margin:0 auto 20px;border:1px solid rgba(100,244,171,0.4);line-height:68px;text-align:center;">
+        <span style="font-size:28px;">&#10003;</span>
+      </div>
+      <div style="display:inline-block;background:rgba(100,244,171,0.15);border:1px solid #64F4AB;border-radius:50px;padding:4px 16px;margin-bottom:14px;">
+        <span style="color:#64F4AB;font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;">Order Confirmed</span>
+      </div>
+      <h1 style="color:#ffffff;margin:0 0 8px;font-size:22px;font-weight:700;">Thanks for your order, {{FIRSTNAME}}!</h1>
+      <p style="color:#8b949e;margin:0;font-size:13px;">Order <strong style="color:#e6edf3;">{{ORDER_ID}}</strong> &middot; {{ORDER_DATE}}</p>
+    </div>
+
+    <!-- White content -->
+    <div style="background:#ffffff;border-left:1px solid #e1e4e8;border-right:1px solid #e1e4e8;padding:28px;">
+
+      <p style="color:#24292f;font-size:15px;line-height:1.8;margin:0 0 24px;">
+        We&apos;ve received your order and it&apos;s being processed.
+        We&apos;ll notify you when it ships.
+      </p>
+
+      <!-- Order items table -->
+      <div style="background:#f6f8fa;border-radius:8px;border:1px solid #e1e4e8;overflow:hidden;margin-bottom:20px;">
+        <!-- Table header -->
+        <table style="width:100%;border-collapse:collapse;">
+          <thead>
+            <tr style="background:#f0f2f5;">
+              <th style="padding:10px 16px;text-align:left;color:#656d76;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;border-bottom:1px solid #e1e4e8;">Item</th>
+              <th style="padding:10px 16px;text-align:center;color:#656d76;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;border-bottom:1px solid #e1e4e8;">Qty</th>
+              <th style="padding:10px 16px;text-align:right;color:#656d76;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;border-bottom:1px solid #e1e4e8;">Price</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Repeat this row per item -->
+            <tr>
+              <td style="padding:12px 16px;color:#24292f;font-size:14px;border-bottom:1px solid #e1e4e8;">{{ITEM_NAME}}</td>
+              <td style="padding:12px 16px;color:#24292f;font-size:14px;text-align:center;border-bottom:1px solid #e1e4e8;">{{ITEM_QTY}}</td>
+              <td style="padding:12px 16px;color:#24292f;font-size:14px;text-align:right;font-weight:600;border-bottom:1px solid #e1e4e8;">{{ITEM_PRICE}}</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <!-- Totals section -->
+        <table style="width:100%;border-collapse:collapse;padding:12px 16px 0;">
+          <tr>
+            <td style="padding:8px 16px;color:#656d76;font-size:13px;">Subtotal</td>
+            <td style="padding:8px 16px;color:#24292f;font-size:13px;text-align:right;">{{SUBTOTAL}}</td>
+          </tr>
+          <tr>
+            <td style="padding:8px 16px;color:#656d76;font-size:13px;">Shipping</td>
+            <td style="padding:8px 16px;color:#24292f;font-size:13px;text-align:right;">{{SHIPPING}}</td>
+          </tr>
+          <tr style="border-top:2px solid #e1e4e8;">
+            <td style="padding:12px 16px;color:#24292f;font-size:15px;font-weight:700;">Total</td>
+            <td style="padding:12px 16px;color:#1a7f5a;font-size:15px;font-weight:700;text-align:right;">{{ORDER_TOTAL}}</td>
+          </tr>
+        </table>
+      </div>
+
+      <!-- Track order CTA -->
+      <div style="text-align:center;margin-bottom:24px;">
+        <a href="{{TRACKING_URL}}"
+           style="display:inline-block;background:#FECD1A;color:#000000;padding:12px 30px;text-decoration:none;border-radius:50px;font-weight:700;font-size:14px;">
+          Track Your Order &#8594;
+        </a>
+      </div>
+
+      <!-- Support note -->
+      <div style="background:#f6f8fa;border-radius:8px;border:1px solid #e1e4e8;padding:14px 18px;text-align:left;">
+        <p style="color:#24292f;font-size:13px;margin:0;line-height:1.6;">
+          <strong>Need help?</strong> Reply to this email or contact us at
+          <a href="mailto:{{SUPPORT_EMAIL}}" style="color:#0969da;text-decoration:none;">{{SUPPORT_EMAIL}}</a>
+          and we&apos;ll be happy to assist.
+        </p>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div style="background:#f6f8fa;border:1px solid #e1e4e8;border-top:0;border-radius:0 0 12px 12px;padding:18px 28px;text-align:center;">
+      <p style="color:#656d76;font-size:12px;margin:0 0 4px;">
+        <a href="{{SITE_URL}}" style="color:#1a7f5a;text-decoration:none;font-weight:600;">{{BRAND_NAME}}</a>
+      </p>
+      <p style="color:#8c949e;font-size:11px;margin:0;">
+        Order confirmation for {{ORDER_ID}}. Please keep this email for your records.
+      </p>
+    </div>
+
+  </div>
+</body>
+</html>

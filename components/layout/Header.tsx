@@ -1,8 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { useState, useEffect } from "react";
-import { motion, useScroll, AnimatePresence } from "framer-motion";
+import { useState } from "react";
+import { motion, useScroll, AnimatePresence, useMotionValueEvent } from "framer-motion";
 import { Phone, Menu, X, Package, ChevronDown } from "lucide-react";
 import MobileNav from "./MobileNav";
 
@@ -20,11 +20,9 @@ export default function Header({ categories }: HeaderProps) {
   const { scrollY } = useScroll();
   const [isScrolled, setIsScrolled] = useState(false);
 
-  useEffect(() => {
-    return scrollY.onChange((latest) => {
-      setIsScrolled(latest > 20);
-    });
-  }, [scrollY]);
+  useMotionValueEvent(scrollY, "change", (latest) => {
+    setIsScrolled(latest > 20);
+  });
 
   const navItems = [
     { label: 'Products', href: '/products', hasDropdown: true },
@@ -100,9 +98,9 @@ export default function Header({ categories }: HeaderProps) {
                             animate={{ opacity: 1, y: 0, scale: 1 }}
                             exit={{ opacity: 0, y: 10, scale: 0.95 }}
                             transition={{ duration: 0.2, ease: "easeOut" }}
-                            className="absolute top-full left-1/2 -translate-x-1/2 pt-4 w-[280px] pointer-events-auto"
+                            className="absolute top-full left-1/2 -translate-x-1/2 pt-4 w-[280px] pointer-events-auto z-50"
                           >
-                            <div className="bg-white border border-border-subtle rounded-2xl shadow-2xl p-3 overflow-hidden">
+                            <div className="bg-white border border-border-subtle rounded-2xl shadow-2xl p-3 overflow-hidden shadow-brand-primary/10">
                               <div className="grid grid-cols-1 gap-1">
                                 <Link
                                   href="/products"
@@ -113,7 +111,7 @@ export default function Header({ categories }: HeaderProps) {
                                   <div className="w-1.5 h-1.5 rounded-full bg-brand-accent scale-50 opacity-0 group-hover:scale-100 group-hover:opacity-100 transition-all duration-300" />
                                 </Link>
                                 <div className="h-px bg-border-subtle mx-2 my-1" />
-                                {categories?.map((cat) => (
+                                {(categories || []).map((cat) => (
                                   <Link
                                     key={cat._id}
                                     href={`/products/${cat.slug}`}
