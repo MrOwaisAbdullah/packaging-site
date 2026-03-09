@@ -6,6 +6,7 @@ import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Package, ShieldCheck, Truck, ChevronRight } from 'lucide-react'
 import WhatsAppButton from '@/components/whatsapp/WhatsAppButton'
+import { urlFor } from '@/sanity/lib/image'
 
 const DEFAULT_SETTINGS = {
   phoneNumber: '+971500000000',
@@ -38,10 +39,20 @@ export default function ProductClient({ product, settings = {}, relatedProducts 
                     transition={{ duration: 0.4 }}
                     className="absolute inset-0"
                   >
-                    {/* Placeholder colored box if unsplash fails */}
-                    <div className="absolute inset-0 bg-gradient-to-br from-bg-subtle to-bg-base flex items-center justify-center">
-                       <Package className="w-24 h-24 text-border-strong" />
-                    </div>
+                    {product.images && product.images[activeImage]?.asset ? (
+                      <Image
+                        src={urlFor(product.images[activeImage].asset).width(800).height(800).url()}
+                        alt={product.images[activeImage]?.alt || product.name.en}
+                        fill
+                        className="object-cover"
+                        sizes="(max-width: 768px) 100vw, 50vw"
+                        priority
+                      />
+                    ) : (
+                      <div className="absolute inset-0 bg-gradient-to-br from-bg-subtle to-bg-base flex items-center justify-center">
+                        <Package className="w-24 h-24 text-border-strong" />
+                      </div>
+                    )}
                   </motion.div>
                 </AnimatePresence>
                 
@@ -74,9 +85,19 @@ export default function ProductClient({ product, settings = {}, relatedProducts 
                           : 'border-transparent hover:border-brand-primary/30 opacity-70 hover:opacity-100'
                       }`}
                     >
-                      <div className="absolute inset-0 bg-gradient-to-br from-bg-subtle to-bg-base flex items-center justify-center">
-                        <Package className="w-8 h-8 text-border-strong opacity-50" />
-                      </div>
+                      {product.images[index]?.asset ? (
+                        <Image
+                          src={urlFor(product.images[index].asset).width(200).height(200).url()}
+                          alt={product.images[index]?.alt || `${product.name.en} view ${index + 1}`}
+                          fill
+                          className="object-cover"
+                          sizes="100px"
+                        />
+                      ) : (
+                        <div className="absolute inset-0 bg-gradient-to-br from-bg-subtle to-bg-base flex items-center justify-center">
+                          <Package className="w-8 h-8 text-border-strong opacity-50" />
+                        </div>
+                      )}
                     </button>
                   ))}
                 </div>
@@ -193,11 +214,9 @@ export default function ProductClient({ product, settings = {}, relatedProducts 
             
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {relatedProducts.map((p: any, i: number) => {
-                const fallbackImages = [
-                  'https://images.unsplash.com/photo-1587293852726-70cdb56c2866?w=400&q=80',
-                  'https://images.unsplash.com/photo-1605600659873-d808a1d8f742?w=400&q=80',
-                  'https://images.unsplash.com/photo-1530982011887-3cc11cc85693?w=400&q=80'
-                ];
+                const imageUrl = p.images?.[0]?.asset
+                  ? urlFor(p.images[0].asset).width(200).height(200).url()
+                  : null;
                 return (
                 <Link
                   key={p._id}
@@ -206,12 +225,16 @@ export default function ProductClient({ product, settings = {}, relatedProducts 
                 >
                   <div className="bg-white rounded-2xl overflow-hidden border border-border-subtle hover:border-brand-primary/20 hover:shadow-[0_20px_40px_rgba(0,0,0,0.08)] transition-all duration-500 flex items-center p-4 gap-4 h-full">
                      <div className="w-24 h-24 rounded-xl bg-bg-subtle flex-shrink-0 relative overflow-hidden flex items-center justify-center border border-border-subtle group-hover:border-brand-primary/20 transition-colors">
-                        <Image 
-                           src={fallbackImages[i % fallbackImages.length]}
-                           alt={p.name.en}
-                           fill
-                           className="object-cover group-hover:scale-110 transition-transform duration-500"
-                        />
+                        {imageUrl ? (
+                          <Image 
+                            src={imageUrl}
+                            alt={p.name.en}
+                            fill
+                            className="object-cover group-hover:scale-110 transition-transform duration-500"
+                          />
+                        ) : (
+                          <Package className="w-10 h-10 text-border-strong" />
+                        )}
                      </div>
                      <div className="flex-1">
                        <p className="text-xs text-brand-accent font-bold uppercase tracking-wider mb-1">{p.category?.name}</p>

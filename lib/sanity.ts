@@ -116,132 +116,6 @@ function getMockData<T>(query: string): T {
       ] as T
   }
 
-  if (query.includes('product')) {
-    // Return mock products for development
-    return [
-      {
-        _id: 'prod1',
-        _type: 'product',
-        name: { en: 'Heavy Duty Corrugated Box' },
-        slug: { current: 'heavy-duty-corrugated-box' },
-        sku: 'CD-HD-001',
-        category: { name: 'Corrugated Boxes', slug: 'corrugated-boxes' },
-        description: { en: 'Industrial strength corrugated boxes designed for heavy items. Double wall construction provides extra durability.' },
-        specifications: [
-          { label: 'Material', value: 'Double Wall Corrugated' },
-          { label: 'Size', value: '18x12x6 inches' },
-          { label: 'Weight Capacity', value: 'Up to 25kg' },
-          { label: 'Certification', value: 'ISO 9001' }
-        ],
-        images: [{ isPrimary: true, asset: { _ref: 'image-placeholder' } }],
-        mainImage: null,
-        pricing: { showPrice: false, moq: 50, unit: 'pieces', priceFrom: 0, priceTo: 0 },
-        badges: [{ label: 'Best Seller', color: '#FF6B35' }],
-        seo: { metaTitle: 'Heavy Duty Corrugated Box | NextLevel Packaging', metaDescription: 'Industrial strength corrugated boxes for heavy items' }
-      },
-      {
-        _id: 'prod2',
-        _type: 'product',
-        name: { en: 'Stretch Film Roll 500mm' },
-        slug: { current: 'stretch-film-roll-500mm' },
-        sku: 'SF-500-001',
-        category: { name: 'Stretch Films', slug: 'stretch-films' },
-        description: { en: 'Premium quality stretch film for pallet wrapping. 500mm width, 23 micron thickness for maximum load stability.' },
-        specifications: [
-          { label: 'Width', value: '500mm' },
-          { label: 'Thickness', value: '23 microns' },
-          { label: 'Length', value: '150m' },
-          { label: 'Elongation', value: '250%' }
-        ],
-        images: [{ isPrimary: true, asset: { _ref: 'image-placeholder' } }],
-        mainImage: null,
-        pricing: { showPrice: true, priceFrom: 45, priceTo: 85, moq: 10, unit: 'rolls' },
-        badges: [{ label: 'Popular', color: '#FF6B35' }],
-        seo: {}
-      },
-      {
-        _id: 'prod3',
-        _type: 'product',
-        name: { en: 'Bubble Wrap 100m Roll' },
-        slug: { current: 'bubble-wrap-100m' },
-        sku: 'BW-100-001',
-        category: { name: 'Bubble Wrap', slug: 'bubble-wrap' },
-        description: { en: 'Protective bubble wrap for fragile items. 100m roll with small bubbles for optimal protection.' },
-        specifications: [
-          { label: 'Bubble Size', value: '10mm diameter' },
-          { label: 'Roll Length', value: '100m' },
-          { label: 'Width', value: '1.2m' },
-          { label: 'Perforation', value: 'No' }
-        ],
-        images: [{ isPrimary: true, asset: { _ref: 'image-placeholder' } }],
-        mainImage: null,
-        pricing: { showPrice: true, priceFrom: 25, priceTo: 45, moq: 20, unit: 'rolls' },
-        badges: [],
-        seo: {}
-      },
-      {
-        _id: 'prod4',
-        _type: 'product',
-        name: { en: 'Clear Packaging Tape' },
-        slug: { current: 'clear-packaging-tape' },
-        sku: 'PT-CLR-001',
-        category: { name: 'Tapes', slug: 'tapes' },
-        description: { en: 'Crystal clear packaging tape for professional box sealing. 48mm width, 66m length per roll.' },
-        specifications: [
-          { label: 'Width', value: '48mm' },
-          { label: 'Length', value: '66m' },
-          { label: 'Thickness', value: '50 microns' },
-          { label: 'Adhesive', value: 'Acrylic' }
-        ],
-        images: [{ isPrimary: true, asset: { _ref: 'image-placeholder' } }],
-        mainImage: null,
-        pricing: { showPrice: true, priceFrom: 5, priceTo: 15, moq: 100, unit: 'rolls' },
-        badges: [{ label: 'New', color: '#10B981' }],
-        seo: {}
-      },
-      {
-        _id: 'prod5',
-        _type: 'product',
-        name: { en: 'Cardboard Boxes Mailing Box' },
-        slug: { current: 'cardboard-mailing-box' },
-        sku: 'CB-MB-001',
-        category: { name: 'Boxes', slug: 'boxes' },
-        description: { en: 'Self-locking mailing boxes made from recycled cardboard. Perfect for e-commerce and subscription boxes.' },
-        specifications: [
-          { label: 'Size', value: '12x9x4 inches' },
-          { label: 'Material', value: 'Recycled Cardboard' },
-          { label: 'EFL Rating', value: '32 ECT' },
-          { label: 'Closure', value: 'Self-Locking' }
-        ],
-        images: [{ isPrimary: true, asset: { _ref: 'image-placeholder' } }],
-        mainImage: null,
-        pricing: { showPrice: true, priceFrom: 8, priceTo: 18, moq: 100, unit: 'pieces' },
-        badges: [{ label: 'Eco-Friendly', color: '#10B981' }],
-        seo: {}
-      },
-      {
-        _id: 'prod6',
-        _type: 'product',
-        name: { en: 'Kraft Paper Roll 80gsm' },
-        slug: { current: 'kraft-paper-roll-80gsm' },
-        sku: 'PP-80-001',
-        category: { name: 'Packaging Paper', slug: 'packaging-paper' },
-        description: { en: 'Natural brown kraft paper roll for wrapping and interleaving. 80gsm weight, ideal for food packaging.' },
-        specifications: [
-          { label: 'GSM', value: '80gsm' },
-          { label: 'Roll Width', value: '900mm' },
-          { label: 'Length', value: '200m' },
-          { label: 'Material', value: 'Virgin Kraft' }
-        ],
-        images: [{ isPrimary: true, asset: { _ref: 'image-placeholder' } }],
-        mainImage: null,
-        pricing: { showPrice: true, priceFrom: 35, priceTo: 55, moq: 5, unit: 'rolls' },
-        badges: [{ label: 'Food Safe', color: '#3B82F6' }],
-        seo: {}
-      },
-    ] as T
-  }
-
   if (query.includes('category')) {
     // Return categories array directly - format matches GROQ projection "slug": slug.current
     return [
@@ -290,6 +164,7 @@ export async function getProducts() {
       "slug": slug.current,
       sku,
       category->{name, "slug": slug.current},
+      images[]{..., asset->},
       mainImage,
       pricing,
       badges,
@@ -311,7 +186,7 @@ export async function getProductBySlug(slug: string) {
       category->{name, "slug": slug.current},
       description,
       specifications,
-      images[],
+      images[]{..., asset->},
       pricing,
       badges,
       seo,
@@ -363,6 +238,7 @@ export async function getProductsByCategory(categorySlug: string) {
       "slug": slug.current,
       sku,
       category->{name, "slug": slug.current},
+      images[]{..., asset->},
       mainImage,
       pricing,
       badges

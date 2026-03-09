@@ -1,6 +1,8 @@
 import { Metadata } from 'next'
+import { notFound } from 'next/navigation'
 import Breadcrumb from '@/components/ui/Breadcrumb'
 import ProductClient from '@/components/product/ProductClient'
+import { getProductBySlug, getProductsByCategory, getSettings } from '@/lib/sanity'
 
 export const revalidate = 3600
 
@@ -8,98 +10,55 @@ interface ProductPageProps {
   params: Promise<{ category: string; slug: string }>
 }
 
-// Mock data since Sanity is not connected
-const mockProduct = {
-  _id: 'mock-1',
-  name: { en: 'Heavy Duty Double Wall Corrugated Box' },
-  slug: { current: 'heavy-duty-double-wall-corrugated-box' },
-  sku: 'CD-HD-001',
-  category: { name: 'Corrugated Boxes', slug: { current: 'corrugated-boxes' } },
-  description: {
-    en: 'Our Heavy Duty Double Wall Corrugated Boxes provide exceptional strength and protection for your most demanding shipping and storage needs. Engineered with premium kraft paper, these boxes resist crushing, puncturing, and tearing during transit.\n\nIdeal for industrial parts, heavy electronics, or fragile items requiring extra cushioning. The fluting structure absorbs shocks, making it the perfect choice for e-commerce fulfillment and export shipments across the UAE and globally.',
-  },
-  pricing: {
-    showPrice: true,
-    priceFrom: 4.5,
-    priceTo: 12.0,
-    moq: 500,
-    unit: 'Pieces',
-  },
-  specifications: [
-    { label: 'Material', value: 'Double Wall Kraft Corrugated Board' },
-    { label: 'Flute Type', value: 'B/C Flute (approx. 7mm thickness)' },
-    { label: 'Bursting Strength', value: 'High (ECT Edge Crush Test Certified)' },
-    { label: 'Color', value: 'Natural Brown (Custom Printing Available)' },
-    { label: 'Recyclability', value: '100% Recyclable & Biodegradable' },
-  ],
-  badges: [
-    { label: 'Best Seller', color: '#ef4444' },
-    { label: 'Eco-Friendly', color: '#10b981' },
-  ],
-  images: [
-    { isPrimary: true, alt: 'Heavy Duty Box Front View' },
-    { isPrimary: false, alt: 'Box Stacked View' },
-    { isPrimary: false, alt: 'Box Thickness Detail' },
-  ],
-}
-
-const mockSettings = {
-  whatsappNumber: '+971xx1234567',
-  phoneNumber: '+971 xx 123 4567',
-}
-
-const mockRelatedProducts = [
-  {
-    _id: 'mock-2',
-    name: { en: 'Standard Single Wall Box' },
-    slug: { current: 'standard-single-wall-box' },
-    sku: 'CD-SW-002',
-    category: { name: 'Corrugated Boxes', slug: { current: 'corrugated-boxes' } },
-    pricing: { showPrice: true, priceFrom: 2.0 },
-  },
-  {
-    _id: 'mock-3',
-    name: { en: 'Printed Mailing Box' },
-    slug: { current: 'printed-mailing-box' },
-    sku: 'MB-PR-001',
-    category: { name: 'Mailing Boxes', slug: { current: 'mailing-boxes' } },
-    pricing: { showPrice: false },
-  },
-  {
-    _id: 'mock-4',
-    name: { en: 'Die-Cut Storage Box' },
-    slug: { current: 'die-cut-storage-box' },
-    sku: 'DC-ST-003',
-    category: { name: 'Storage Solutions', slug: { current: 'storage-solutions' } },
-    pricing: { showPrice: true, priceFrom: 5.5 },
-  },
-]
-
 export async function generateMetadata(
   { params }: ProductPageProps
 ): Promise<Metadata> {
   const { slug } = await params
-  
-  // Format slug to regular title for mock data SEO
-  const formattedTitle = slug.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')
+  const product = await getProductBySlug(slug)
+
+  if (!product) {
+    return { title: 'Product Not Found' }
+  }
 
   return {
-    title: `${formattedTitle} | NextLevel Packaging UAE`,
-    description: `Buy premium ${formattedTitle} in Dubai, Sharjah, and Ajman. Best wholesale packaging materials for businesses.`,
+    title: `${product.name.en} | NextLevel Packaging UAE`,
+    description: product.description?.en
+      ? product.description.en.substring(0, 160)
+      : `Buy premium ${product.name.en} in Dubai, Sharjah, and Ajman. Best wholesale packaging materials for businesses.`,
   }
 }
 
 export default async function ProductPage({ params }: ProductPageProps) {
   const { category, slug } = await params
 
-  // Override mock product names based on the URL for realism while testing
-  const displayProduct = {
-    ...mockProduct,
-    name: { en: slug.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ') },
-    category: { 
-      name: category.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' '),
-      slug: { current: category }
-    }
+  // Fetch product, settings and related products in parallel
+  const [product, settings] = await Promise.all([
+    getProductBySlug(slug),
+    getSettings(),
+  ])
+
+  if (!product) {
+    notFound()
+  }
+
+  // Fetch related products from the same category (exclude current product)
+  const categoryProducts = await getProductsByCategory(category)
+  let relatedProducts = categoryProducts
+    .filter((p: any) => p.slug !== slug) 
+    .slice(0, 3)
+
+  // Fallback: If less than 3 related products, fetch from other categories
+  if (relatedProducts.length < 3) {
+    const { getProducts } = await import('@/lib/sanity')
+    const allProducts = await getProducts()
+    const fallbackProducts = allProducts
+      .filter((p: any) => 
+        p.slug !== slug && 
+        !relatedProducts.some((rp: any) => rp.slug === p.slug)
+      )
+      .slice(0, 3 - relatedProducts.length)
+    
+    relatedProducts = [...relatedProducts, ...fallbackProducts]
   }
 
   return (
@@ -111,8 +70,11 @@ export default async function ProductPage({ params }: ProductPageProps) {
             items={[
               { label: 'Home', href: '/' },
               { label: 'Products', href: '/products' },
-              { label: displayProduct.category.name, href: `/products/${category}` },
-              { label: displayProduct.name.en, current: true },
+              { 
+                label: product.category?.name || (category !== 'all' ? category : 'All Products'), 
+                href: `/products/${product.category?.slug || (category !== 'all' ? category : '')}` 
+              },
+              { label: product.name.en, current: true },
             ]}
           />
         </div>
@@ -120,9 +82,9 @@ export default async function ProductPage({ params }: ProductPageProps) {
 
       {/* Main Product Layout (Client Component for Interactivity) */}
       <ProductClient 
-        product={displayProduct} 
-        settings={mockSettings} 
-        relatedProducts={mockRelatedProducts} 
+        product={product} 
+        settings={settings} 
+        relatedProducts={relatedProducts} 
       />
     </main>
   )
