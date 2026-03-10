@@ -3,6 +3,7 @@
 import { useRef } from 'react'
 import Link from 'next/link'
 import { motion, useInView } from 'framer-motion'
+import { ArrowRight } from 'lucide-react'
 import {
   Box,
   Film,
@@ -122,6 +123,22 @@ export default function CategoryShowcaseSection({ categories }: CategoryShowcase
               </motion.div>
             )
           })}
+        </motion.div>
+
+        {/* See All CTA */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={isInView ? { opacity: 1 } : {}}
+          transition={{ delay: 0.2, duration: 0.4 }}
+          className="text-center mt-10"
+        >
+          <Link
+            href="/products"
+            className="group inline-flex items-center gap-2 px-8 py-4 bg-white text-brand-primary border-2 border-brand-primary rounded-xl font-semibold hover:bg-brand-primary hover:text-white transition-all duration-300"
+          >
+            See All Range
+            <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+          </Link>
         </motion.div>
       </div>
     </section>
