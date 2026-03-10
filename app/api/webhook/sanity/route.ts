@@ -1,11 +1,11 @@
 import { revalidateTag } from 'next/cache'
 import { NextRequest, NextResponse } from 'next/server'
-import { verifyWebhookSignature, WEBHOOK_SIGNATURE_HEADER } from '@/sanity/lib/webhook'
+import { verifyWebhookSignature } from '@/sanity/lib/webhook'
 import { rateLimitMiddleware } from '@/lib/rate-limit'
 
 interface SanityWebhookPayload {
   _id: string
-  _type: 'product' | 'post' | 'category' | 'settings'
+  _type: 'product' | 'post' | 'postCategory' | 'category' | 'settings'
   slug?: {
     current: string
   }
@@ -24,24 +24,11 @@ export async function POST(request: NextRequest) {
       return rateLimitResponse
     }
 
-    // Get signature from headers
-    const signature = request.headers.get(WEBHOOK_SIGNATURE_HEADER)
+    // Verify signature and parse body in one step
+    // parseBody from next-sanity/webhook handles raw body reading internally
+    const { isValidSignature, body } = await verifyWebhookSignature<SanityWebhookPayload>(request)
 
-    if (!signature) {
-      console.error('Missing webhook signature')
-      return NextResponse.json(
-        { error: 'Unauthorized', message: 'Missing signature' },
-        { status: 401 }
-      )
-    }
-
-    // Get raw body for signature verification
-    const rawBody = await request.text()
-
-    // Verify signature
-    const isValid = await verifyWebhookSignature(rawBody, signature)
-
-    if (!isValid) {
+    if (!isValidSignature || !body) {
       console.error('Invalid webhook signature')
       return NextResponse.json(
         { error: 'Unauthorized', message: 'Invalid signature' },
@@ -49,16 +36,7 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Parse payload
-    let payload: SanityWebhookPayload
-    try {
-      payload = JSON.parse(rawBody)
-    } catch {
-      return NextResponse.json(
-        { error: 'Bad Request', message: 'Invalid JSON' },
-        { status: 400 }
-      )
-    }
+    const payload = body
 
     console.log('Webhook received:', {
       type: payload._type,
@@ -72,6 +50,7 @@ export async function POST(request: NextRequest) {
     switch (payload._type) {
       case 'product':
         tags.push('products')
+        tags.push('featured') // Featured products section
         if (payload.slug?.current) {
           tags.push(`product:${payload.slug.current}`)
         }
@@ -86,21 +65,28 @@ export async function POST(request: NextRequest) {
         }
         break
 
+      case 'postCategory':
+        tags.push('blogCategories')
+        // Category changes affect posts
+        tags.push('posts')
+        if (payload.slug?.current) {
+          tags.push(`blogCategory:${payload.slug.current}`)
+        }
+        break
+
       case 'category':
         tags.push('categories')
         // Category changes affect products
         tags.push('products')
+        tags.push('featured') // Featured products may be affected
         if (payload.slug?.current) {
           tags.push(`category:${payload.slug.current}`)
         }
         break
 
       case 'settings':
-        tags.push('settings')
-        // Settings affect all pages (header, footer, etc.)
-        revalidateTag('products', 'webhook')
-        revalidateTag('posts', 'webhook')
-        revalidateTag('categories', 'webhook')
+        // Settings affect all pages
+        tags.push('products', 'posts', 'categories', 'blogCategories', 'featured')
         break
 
       default:
@@ -109,7 +95,7 @@ export async function POST(request: NextRequest) {
 
     // Perform revalidation
     for (const tag of tags) {
-      revalidateTag(tag, 'webhook')
+      revalidateTag(tag, {}) // Second arg required in Next.js 15: CacheLifeConfig
       console.log('Revalidated tag:', tag)
     }
 

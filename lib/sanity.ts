@@ -31,7 +31,10 @@ const isUsingMockData = !projectId
 
 /**
  * Helper function to fetch data with caching
- * Uses React.cache() for deduplication per request
+ * Uses Next.js 15 fetch caching with tag-based revalidation
+ *
+ * When tags are provided: use on-demand revalidation via webhook
+ * When no tags: use time-based revalidation (default 3600s = 1 hour)
  */
 export async function sanityFetch<T>(
   query: string,
@@ -43,8 +46,9 @@ export async function sanityFetch<T>(
   }
 
   return client.fetch<T>(query, params || {}, {
+    cache: 'force-cache', // Required for Next.js 15
     next: {
-      revalidate: 3600, // Revalidate every hour
+      revalidate: tags && tags.length > 0 ? false : 3600, // Disable time-based revalidation when using tags
       tags,
     },
   })
@@ -170,7 +174,9 @@ export async function getProducts() {
       badges,
       featured,
       seo
-    }|order(order asc)`
+    }|order(order asc)`,
+    undefined,
+    ['products'] // Tag for webhook revalidation
   )
 }
 
@@ -191,14 +197,16 @@ export async function getFeaturedProducts() {
       pricing,
       badges,
       featured
-    }|order(order asc)`
+    }|order(order asc)`,
+    undefined,
+    ['products', 'featured'] // Tags for webhook revalidation
   )
-  
+
   // Fallback: if no products are marked featured, return first 6 of all products
   if (!featured || featured.length === 0) {
     return getProducts()
   }
-  
+
   return featured
 }
 
@@ -239,7 +247,9 @@ export async function getCategories() {
       description,
       icon,
       order
-    }|order(order asc)`
+    }|order(order asc)`,
+    undefined,
+    ['categories'] // Tag for webhook revalidation
   )
 }
 
@@ -252,7 +262,9 @@ export async function getBlogCategories() {
       _id,
       name,
       "slug": slug.current
-    }|order(name asc)`
+    }|order(name asc)`,
+    undefined,
+    ['blogCategories'] // Tag for webhook revalidation
   )
 }
 
