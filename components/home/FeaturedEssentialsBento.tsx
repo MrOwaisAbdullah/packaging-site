@@ -119,11 +119,11 @@ export default function FeaturedEssentialsBento({ bentoProducts = [] }: Featured
             // Match our bento categories to actual Sanity products securely
             let product = null;
             if (card.id === 'stretch-films') {
-              product = bentoProducts.find(p => p.category?.slug === 'films-wraps' || p.name.toLowerCase().includes('stretch'));
+              product = bentoProducts.find(p => p.category?.slug === 'films-wraps' || p.name?.en?.toLowerCase().includes('stretch'));
             } else if (card.id === 'bubble-wrap') {
-              product = bentoProducts.find(p => p.category?.slug === 'foams-boards' && p.name.toLowerCase().includes('bubble')) || bentoProducts.find(p => p.category?.slug === 'foams-boards');
+              product = bentoProducts.find(p => p.category?.slug === 'foams-boards' && p.name?.en?.toLowerCase().includes('bubble')) || bentoProducts.find(p => p.category?.slug === 'foams-boards');
             } else if (card.id === 'cotton-rolls') {
-              product = bentoProducts.find(p => (p.category?.slug === 'foams-boards' || p.category?.slug === 'tapes') && p.name.toLowerCase().includes('cotton')) || bentoProducts.find(p => p.category?.slug === 'tapes');
+              product = bentoProducts.find(p => (p.category?.slug === 'foams-boards' || p.category?.slug === 'tapes') && p.name?.en?.toLowerCase().includes('cotton')) || bentoProducts.find(p => p.category?.slug === 'tapes');
             } else if (card.id === 'boxes') {
               product = bentoProducts.find(p => p.category?.slug === 'boxes-cartons');
             }
@@ -151,16 +151,16 @@ export default function FeaturedEssentialsBento({ bentoProducts = [] }: Featured
                     
                     {/* Background Image (if exists) */}
                     {imageUrl && (
-                      <div className="absolute inset-0 w-full h-full z-0 opacity-40 group-hover:opacity-60 transition-opacity duration-500 mix-blend-multiply">
+                      <div className="absolute inset-0 w-full h-full z-0 opacity-80 group-hover:opacity-100 transition-opacity duration-500">
                         <Image
                           src={imageUrl}
-                          alt={product.name || card.title}
+                          alt={typeof product?.name === 'object' ? product.name.en : (product?.name || card.title)}
                           fill
                           className="object-cover object-center"
                           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                         />
-                        {/* Gradient overlay to ensure text is readable */}
-                        <div className="absolute inset-0 bg-gradient-to-t from-white via-white/80 to-transparent" />
+                        {/* Subtle gradient only at bottom for text readability */}
+                        <div className="absolute inset-0 bg-gradient-to-t from-white via-white/40 to-transparent" />
                       </div>
                     )}
 

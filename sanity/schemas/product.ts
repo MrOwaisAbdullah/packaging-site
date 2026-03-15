@@ -55,6 +55,13 @@ export const productSchema = defineType({
       initialValue: false,
     }),
     defineField({
+      name: 'active',
+      title: 'Active Product',
+      type: 'boolean',
+      description: 'Turn off to hide this product from the website',
+      initialValue: true,
+    }),
+    defineField({
       name: 'description',
       title: 'Description',
       type: 'object',

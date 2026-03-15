@@ -162,7 +162,7 @@ function getMockData<T>(query: string): T {
  */
 export async function getProducts() {
   return sanityFetch<any[]>(
-    `*[_type == "product"]{
+    `*[_type == "product" && coalesce(active, true) == true]{
       _id,
       name,
       "slug": slug.current,
@@ -186,7 +186,7 @@ export async function getProducts() {
  */
 export async function getFeaturedProducts() {
   const featured = await sanityFetch<any[]>(
-    `*[_type == "product" && featured == true]{
+    `*[_type == "product" && coalesce(active, true) == true && featured == true]{
       _id,
       name,
       "slug": slug.current,
@@ -215,7 +215,7 @@ export async function getFeaturedProducts() {
  */
 export async function getProductBySlug(slug: string) {
   return sanityFetch<any>(
-    `*[_type == "product" && slug.current == $slug][0]{
+    `*[_type == "product" && coalesce(active, true) == true && slug.current == $slug][0]{
       _id,
       name,
       "slug": slug.current,
@@ -240,7 +240,7 @@ export async function getProductBySlug(slug: string) {
  */
 export async function getBentoProducts() {
   return sanityFetch<any[]>(
-    `*[_type == "product" && category->slug.current in ["films-wraps", "foams-boards", "boxes-cartons", "tapes"]]{
+    `*[_type == "product" && coalesce(active, true) == true && category->slug.current in ["films-wraps", "foams-boards", "boxes-cartons", "tapes"]]{
       _id,
       name,
       "slug": slug.current,
