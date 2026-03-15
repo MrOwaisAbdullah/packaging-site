@@ -5,6 +5,10 @@ import HeroSection from '@/components/home/HeroSection'
 import dynamic from 'next/dynamic'
 
 // Dynamically import sections to avoid hydration issues
+const DynamicFeaturedEssentials = dynamic(
+  () => import('@/components/home/FeaturedEssentialsBento'),
+  { ssr: true }
+)
 const DynamicFeaturedProducts = dynamic(
   () => import('@/components/home/FeaturedProductsSection').then(mod => ({ default: mod.default })),
   { ssr: true }
@@ -48,6 +52,11 @@ export default async function HomePage() {
     <main className="min-h-screen bg-bg-base selection:bg-brand-accent selection:text-white">
       {/* Hero Section */}
       <HeroSection />
+
+      {/* High Volume Essentials Bento */}
+      <Suspense fallback={<div className="container py-20 text-center">Loading essentials...</div>}>
+        <DynamicFeaturedEssentials />
+      </Suspense>
 
       {/* Featured Products */}
       <Suspense fallback={<div className="container py-20 text-center">Loading products...</div>}>
