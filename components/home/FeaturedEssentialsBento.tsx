@@ -16,7 +16,7 @@ const essentials = [
     id: 'stretch-films',
     title: 'Stretch Films & Stitch Rolls',
     subtitle: 'Industrial grade wrapping for pallet stability',
-    href: '/products/stretch-films',
+    href: '/products/films-wraps',
     icon: WrapText,
     color: 'bg-blue-500/10 text-blue-600',
     colSpan: 'md:col-span-2 lg:col-span-2',
@@ -27,7 +27,7 @@ const essentials = [
     id: 'bubble-wrap',
     title: 'Bubble Sheets',
     subtitle: 'Maximized impact protection',
-    href: '/products/bubble-wrap',
+    href: '/products/foams-boards',
     icon: Shield,
     color: 'bg-purple-500/10 text-purple-600',
     colSpan: 'md:col-span-1 lg:col-span-1',
@@ -38,7 +38,7 @@ const essentials = [
     id: 'cotton-rolls',
     title: 'Cotton Rolls',
     subtitle: 'Soft, non-abrasive surface protection',
-    href: '/products/cotton-rolls', // Assuming this slug exists or will exist
+    href: '/products/foams-boards',
     icon: Sparkles,
     color: 'bg-emerald-500/10 text-emerald-600',
     colSpan: 'md:col-span-1 lg:col-span-1',
@@ -49,7 +49,7 @@ const essentials = [
     id: 'boxes',
     title: 'Heavy Duty Boxes',
     subtitle: 'Engineered for logistics & e-commerce',
-    href: '/products/boxes',
+    href: '/products/boxes-cartons',
     icon: Box,
     color: 'bg-brand-primary/10 text-brand-primary',
     colSpan: 'md:col-span-3 lg:col-span-2',
@@ -139,6 +139,11 @@ export default function FeaturedEssentialsBento({ bentoProducts = [] }: Featured
             const mainImage = product?.images?.[0]?.asset || product?.mainImage?.asset
             const imageUrl = mainImage ? urlFor(mainImage).width(600).url() : null
 
+            // Construct the dynamic URL from Sanity data
+            const productHref = product?.category?.slug && product?.slug 
+              ? `/products/${product.category.slug}/${product.slug}`
+              : card.href
+
             return (
               <motion.div
                 key={card.id}
@@ -146,7 +151,7 @@ export default function FeaturedEssentialsBento({ bentoProducts = [] }: Featured
                 className={`relative group ${card.colSpan} ${card.rowSpan}`}
                 suppressHydrationWarning
               >
-                <Link href={card.href} className="block w-full h-full">
+                <Link href={productHref} className="block w-full h-full">
                   <div className={`w-full h-full rounded-3xl p-8 border border-border-subtle bg-white hover:border-brand-primary/20 hover:shadow-2xl hover:shadow-brand-primary/5 transition-all duration-500 overflow-hidden relative flex flex-col`}>
                     
                     {/* Background Image (if exists) */}
