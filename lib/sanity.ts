@@ -236,6 +236,24 @@ export async function getProductBySlug(slug: string) {
 }
 
 /**
+ * Get one representative product for each of the 4 bento categories
+ */
+export async function getBentoProducts() {
+  return sanityFetch<any[]>(
+    `*[_type == "product" && category->slug.current in ["stretch-films", "bubble-wrap", "cotton-rolls", "boxes"]]{
+      _id,
+      name,
+      "slug": slug.current,
+      category->{name, "slug": slug.current},
+      images[]{..., asset->},
+      mainImage{..., asset->}
+    }`,
+    undefined,
+    ['products']
+  )
+}
+
+/**
  * Get all categories
  */
 export async function getCategories() {

@@ -118,8 +118,8 @@ export default async function RootLayout({
     : await Promise.all([getSettings(), getCategories()]);
 
   return (
-    <html lang="en" className={`${outfit.variable} ${plusJakartaSans.variable}`}>
-      <body className={`font-body min-h-screen flex flex-col ${isStudio ? 'bg-white' : ''}`}>
+    <html lang="en" className={`${outfit.variable} ${plusJakartaSans.variable}`} suppressHydrationWarning>
+      <body className={`font-body min-h-screen flex flex-col ${isStudio ? 'bg-white' : ''}`} suppressHydrationWarning>
         {!isStudio && (
           <>
             <OrganizationJsonLd settings={settings} />

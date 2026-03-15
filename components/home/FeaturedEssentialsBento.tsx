@@ -2,8 +2,14 @@
 
 import { useRef } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { motion, useInView } from 'framer-motion'
 import { ArrowUpRight, WrapText, Shield, Sparkles, Box } from 'lucide-react'
+import { urlFor } from '@/sanity/lib/image'
+
+interface FeaturedEssentialsBentoProps {
+  bentoProducts?: any[]
+}
 
 const essentials = [
   {
@@ -70,7 +76,7 @@ const item = {
   }
 }
 
-export default function FeaturedEssentialsBento() {
+export default function FeaturedEssentialsBento({ bentoProducts = [] }: FeaturedEssentialsBentoProps) {
   const ref = useRef(null)
   const isInView = useInView(ref, { once: true, amount: 0.1 })
 
@@ -108,6 +114,11 @@ export default function FeaturedEssentialsBento() {
         >
           {essentials.map((card) => {
             const Icon = card.icon
+            // Find a matching product from Sanity for this card's category
+            const product = bentoProducts.find(p => p.category?.slug === card.id)
+            const mainImage = product?.images?.[0]?.asset || product?.mainImage?.asset
+            const imageUrl = mainImage ? urlFor(mainImage).width(600).url() : null
+
             return (
               <motion.div
                 key={card.id}
@@ -117,15 +128,30 @@ export default function FeaturedEssentialsBento() {
                 <Link href={card.href} className="block w-full h-full">
                   <div className={`w-full h-full rounded-3xl p-8 border border-border-subtle bg-white hover:border-brand-primary/20 hover:shadow-2xl hover:shadow-brand-primary/5 transition-all duration-500 overflow-hidden relative flex flex-col`}>
                     
-                    {/* Hover Gradient Background */}
-                    <div className={`absolute inset-0 bg-gradient-to-br ${card.gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-500`} />
+                    {/* Background Image (if exists) */}
+                    {imageUrl && (
+                      <div className="absolute inset-0 w-full h-full z-0 opacity-40 group-hover:opacity-60 transition-opacity duration-500 mix-blend-multiply">
+                        <Image
+                          src={imageUrl}
+                          alt={product.name || card.title}
+                          fill
+                          className="object-cover object-center"
+                          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                        />
+                        {/* Gradient overlay to ensure text is readable */}
+                        <div className="absolute inset-0 bg-gradient-to-t from-white via-white/80 to-transparent" />
+                      </div>
+                    )}
+
+                    {/* Hover Gradient Background (always applies) */}
+                    <div className={`absolute inset-0 bg-gradient-to-br ${card.gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-0`} />
                     
                     {/* Top Section: Icon & Arrow */}
                     <div className="flex justify-between items-start relative z-10 mb-auto">
-                      <div className={`w-14 h-14 rounded-2xl ${card.color} flex items-center justify-center group-hover:scale-110 transition-transform duration-500 shadow-sm border border-black/5`}>
+                      <div className={`w-14 h-14 rounded-2xl ${card.color} flex items-center justify-center group-hover:scale-110 transition-transform duration-500 shadow-sm border border-black/5 bg-white`}>
                         <Icon className="w-7 h-7" />
                       </div>
-                      <div className="w-10 h-10 rounded-full bg-bg-subtle flex items-center justify-center opacity-0 -translate-y-2 translate-x-2 group-hover:opacity-100 group-hover:translate-y-0 group-hover:translate-x-0 transition-all duration-500">
+                      <div className="w-10 h-10 rounded-full bg-white flex items-center justify-center opacity-0 -translate-y-2 translate-x-2 group-hover:opacity-100 group-hover:translate-y-0 group-hover:translate-x-0 transition-all duration-500 shadow-md">
                         <ArrowUpRight className="w-5 h-5 text-brand-primary" />
                       </div>
                     </div>
