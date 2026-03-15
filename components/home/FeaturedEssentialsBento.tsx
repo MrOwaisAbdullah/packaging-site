@@ -4,17 +4,17 @@ import { useRef } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { motion, useInView } from 'framer-motion'
-import { ArrowUpRight, WrapText, Shield, Sparkles, Box } from 'lucide-react'
+import { ArrowUpRight, WrapText, Box, ShoppingBag, Sticker } from 'lucide-react'
 import { urlFor } from '@/sanity/lib/image'
 
 interface FeaturedEssentialsBentoProps {
-  bentoProducts?: any[]
+  bentoCategories?: any[]
 }
 
 const essentials = [
   {
     id: 'stretch-films',
-    title: 'Stretch Films & Stitch Rolls',
+    title: 'Stretch Films & Wraps',
     subtitle: 'Industrial grade wrapping for pallet stability',
     href: '/products/films-wraps',
     icon: WrapText,
@@ -24,22 +24,22 @@ const essentials = [
     gradient: 'from-blue-500/5 to-transparent',
   },
   {
-    id: 'bubble-wrap',
-    title: 'Bubble Sheets',
-    subtitle: 'Maximized impact protection',
-    href: '/products/foams-boards',
-    icon: Shield,
-    color: 'bg-purple-500/10 text-purple-600',
-    colSpan: 'md:col-span-1 lg:col-span-1',
+    id: 'tapes',
+    title: 'Tapes & Adhesives',
+    subtitle: 'High-tack industrial sealing solutions',
+    href: '/products/tapes',
+    icon: Sticker,
+    color: 'bg-orange-500/10 text-orange-600',
+    colSpan: 'md:col-span-2 lg:col-span-1',
     rowSpan: 'md:row-span-1',
-    gradient: 'from-purple-500/5 to-transparent',
+    gradient: 'from-orange-500/5 to-transparent',
   },
   {
-    id: 'cotton-rolls',
-    title: 'Cotton Rolls',
-    subtitle: 'Soft, non-abrasive surface protection',
-    href: '/products/foams-boards',
-    icon: Sparkles,
+    id: 'pouches-bags',
+    title: 'Pouches & Bags',
+    subtitle: 'High-quality sealing & courier solutions',
+    href: '/products/pouches-bags',
+    icon: ShoppingBag,
     color: 'bg-emerald-500/10 text-emerald-600',
     colSpan: 'md:col-span-1 lg:col-span-1',
     rowSpan: 'md:row-span-1',
@@ -52,7 +52,7 @@ const essentials = [
     href: '/products/boxes-cartons',
     icon: Box,
     color: 'bg-brand-primary/10 text-brand-primary',
-    colSpan: 'md:col-span-3 lg:col-span-2',
+    colSpan: 'md:col-span-1 lg:col-span-2',
     rowSpan: 'md:row-span-1',
     gradient: 'from-brand-primary/5 to-transparent',
   },
@@ -76,7 +76,7 @@ const item = {
   }
 }
 
-export default function FeaturedEssentialsBento({ bentoProducts = [] }: FeaturedEssentialsBentoProps) {
+export default function FeaturedEssentialsBento({ bentoCategories = [] }: FeaturedEssentialsBentoProps) {
   const ref = useRef(null)
   const isInView = useInView(ref, { once: true, amount: 0.1 })
 
@@ -111,38 +111,26 @@ export default function FeaturedEssentialsBento({ bentoProducts = [] }: Featured
           variants={container}
           initial="hidden"
           animate={isInView ? "show" : "hidden"}
-          className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 auto-rows-[250px] gap-4 md:gap-6"
+          className="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-4 auto-rows-[250px] gap-4 md:gap-6"
           suppressHydrationWarning
         >
           {essentials.map((card) => {
             const Icon = card.icon
-            // Match our bento categories to actual Sanity products securely
-            let product = null;
-            if (card.id === 'stretch-films') {
-              product = bentoProducts.find(p => p.category?.slug === 'films-wraps' || p.name?.en?.toLowerCase().includes('stretch'));
-            } else if (card.id === 'bubble-wrap') {
-              product = bentoProducts.find(p => p.category?.slug === 'foams-boards' && p.name?.en?.toLowerCase().includes('bubble')) || bentoProducts.find(p => p.category?.slug === 'foams-boards');
-            } else if (card.id === 'cotton-rolls') {
-              product = bentoProducts.find(p => (p.category?.slug === 'foams-boards' || p.category?.slug === 'tapes') && p.name?.en?.toLowerCase().includes('cotton')) || bentoProducts.find(p => p.category?.slug === 'tapes');
-            } else if (card.id === 'boxes') {
-              product = bentoProducts.find(p => p.category?.slug === 'boxes-cartons');
-            }
             
-            // Stable fallback: use index to avoid hydration mismatch, ensuring it always has a background product
-            const index = essentials.findIndex(c => c.id === card.id);
-            if (!product && bentoProducts.length > index) {
-               product = bentoProducts[index];
-            } else if (!product && bentoProducts.length > 0) {
-               product = bentoProducts[0];
-            }
+            // Match our bento items to actual Sanity categories
+            const category = bentoCategories.find(c => {
+              if (card.id === 'stretch-films') return c.slug === 'films-wraps';
+              if (card.id === 'tapes') return c.slug === 'tapes';
+              if (card.id === 'pouches-bags') return c.slug === 'pouches-bags';
+              if (card.id === 'boxes') return c.slug === 'boxes-cartons';
+              return c.slug === card.id;
+            });
 
-            const mainImage = product?.images?.[0]?.asset || product?.mainImage?.asset
-            const imageUrl = mainImage ? urlFor(mainImage).width(600).url() : null
+            const mainImage = category?.representativeImage?.asset;
+            const imageUrl = mainImage ? urlFor(mainImage).width(800).url() : null;
 
-            // Construct the dynamic URL from Sanity data
-            const productHref = product?.category?.slug && product?.slug 
-              ? `/products/${product.category.slug}/${product.slug}`
-              : card.href
+            // Categories always link to their archive page
+            const categoryHref = category?.slug ? `/products/${category.slug}` : card.href;
 
             return (
               <motion.div
@@ -151,7 +139,7 @@ export default function FeaturedEssentialsBento({ bentoProducts = [] }: Featured
                 className={`relative group ${card.colSpan} ${card.rowSpan}`}
                 suppressHydrationWarning
               >
-                <Link href={productHref} className="block w-full h-full">
+                <Link href={categoryHref} className="block w-full h-full">
                   <div className={`w-full h-full rounded-3xl p-8 border border-border-subtle bg-white hover:border-brand-primary/20 hover:shadow-2xl hover:shadow-brand-primary/5 transition-all duration-500 overflow-hidden relative flex flex-col`}>
                     
                     {/* Background Image (if exists) */}
@@ -159,7 +147,7 @@ export default function FeaturedEssentialsBento({ bentoProducts = [] }: Featured
                       <div className="absolute inset-0 w-full h-full z-0 opacity-80 group-hover:opacity-100 transition-opacity duration-500">
                         <Image
                           src={imageUrl}
-                          alt={typeof product?.name === 'object' ? product.name.en : (product?.name || card.title)}
+                          alt={category?.name || card.title}
                           fill
                           className="object-cover object-center"
                           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"

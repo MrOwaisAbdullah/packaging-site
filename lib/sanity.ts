@@ -236,20 +236,18 @@ export async function getProductBySlug(slug: string) {
 }
 
 /**
- * Get one representative product for each of the 4 bento categories
+ * Get bento categories with representative product images
  */
-export async function getBentoProducts() {
+export async function getBentoCategories() {
   return sanityFetch<any[]>(
-    `*[_type == "product" && coalesce(active, true) == true && category->slug.current in ["films-wraps", "foams-boards", "boxes-cartons", "tapes"]]{
+    `*[_type == "category" && slug.current in ["films-wraps", "tapes", "boxes-cartons", "pouches-bags"]]{
       _id,
       name,
       "slug": slug.current,
-      category->{name, "slug": slug.current},
-      images[]{..., asset->},
-      mainImage{..., asset->}
+      "representativeImage": *[_type == "product" && category._ref == ^._id && defined(images)][0].images[0]{..., asset->}
     }`,
     undefined,
-    ['products']
+    ['categories', 'products']
   )
 }
 

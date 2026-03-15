@@ -1,11 +1,11 @@
 import { Suspense } from 'react'
-import { getFeaturedProducts, getBentoProducts, getCategories } from '@/lib/sanity'
+import { getFeaturedProducts, getBentoCategories, getCategories } from '@/lib/sanity'
 import { Metadata } from 'next'
 import HeroSection from '@/components/home/HeroSection'
 import dynamic from 'next/dynamic'
 
 // Dynamically import sections to avoid hydration issues
-const DynamicFeaturedEssentials = dynamic<{ bentoProducts: any[] }>(
+const DynamicFeaturedEssentials = dynamic<{ bentoCategories: any[] }>(
   () => import('@/components/home/FeaturedEssentialsBento'),
   { ssr: true }
 )
@@ -43,9 +43,9 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function HomePage() {
   // Fetch data for homepage sections
-  const [products, bentoProducts, categories] = await Promise.all([
+  const [products, bentoCategories, categories] = await Promise.all([
     getFeaturedProducts(),
-    getBentoProducts(),
+    getBentoCategories(),
     getCategories(),
   ])
 
@@ -56,7 +56,7 @@ export default async function HomePage() {
 
       {/* High Volume Essentials Bento */}
       <Suspense fallback={<div className="container py-20 text-center">Loading essentials...</div>}>
-        <DynamicFeaturedEssentials bentoProducts={bentoProducts} />
+        <DynamicFeaturedEssentials bentoCategories={bentoCategories} />
       </Suspense>
 
       {/* Featured Products */}
