@@ -52,7 +52,7 @@ const essentials = [
     href: '/products/boxes',
     icon: Box,
     color: 'bg-brand-primary/10 text-brand-primary',
-    colSpan: 'md:col-span-2 lg:col-span-3',
+    colSpan: 'md:col-span-3 lg:col-span-2',
     rowSpan: 'md:row-span-1',
     gradient: 'from-brand-primary/5 to-transparent',
   },
@@ -81,19 +81,20 @@ export default function FeaturedEssentialsBento({ bentoProducts = [] }: Featured
   const isInView = useInView(ref, { once: true, amount: 0.1 })
 
   return (
-    <section ref={ref} className="py-24 bg-white relative overflow-hidden">
+    <section ref={ref} className="py-24 bg-white relative overflow-hidden" suppressHydrationWarning>
       {/* Decorative background elements */}
-      <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
+      <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none" suppressHydrationWarning>
         <div className="absolute -top-[20%] -right-[10%] w-[50%] h-[50%] rounded-full bg-brand-primary/[0.03] blur-3xl opacity-50 mix-blend-multiply" />
         <div className="absolute -bottom-[20%] -left-[10%] w-[50%] h-[50%] rounded-full bg-brand-accent/[0.03] blur-3xl opacity-50 mix-blend-multiply" />
       </div>
 
-      <div className="container relative z-10">
+      <div className="container relative z-10" suppressHydrationWarning>
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6 }}
           className="mb-16"
+          suppressHydrationWarning
         >
           <span className="inline-block py-1 px-3 rounded-full bg-brand-primary/5 text-brand-primary text-sm font-semibold tracking-wider uppercase mb-4 border border-brand-primary/10">
             High-Volume Essentials
@@ -111,11 +112,30 @@ export default function FeaturedEssentialsBento({ bentoProducts = [] }: Featured
           initial="hidden"
           animate={isInView ? "show" : "hidden"}
           className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 auto-rows-[250px] gap-4 md:gap-6"
+          suppressHydrationWarning
         >
           {essentials.map((card) => {
             const Icon = card.icon
-            // Find a matching product from Sanity for this card's category
-            const product = bentoProducts.find(p => p.category?.slug === card.id)
+            // Match our bento categories to actual Sanity products securely
+            let product = null;
+            if (card.id === 'stretch-films') {
+              product = bentoProducts.find(p => p.category?.slug === 'films-wraps' || p.name.toLowerCase().includes('stretch'));
+            } else if (card.id === 'bubble-wrap') {
+              product = bentoProducts.find(p => p.category?.slug === 'foams-boards' && p.name.toLowerCase().includes('bubble')) || bentoProducts.find(p => p.category?.slug === 'foams-boards');
+            } else if (card.id === 'cotton-rolls') {
+              product = bentoProducts.find(p => (p.category?.slug === 'foams-boards' || p.category?.slug === 'tapes') && p.name.toLowerCase().includes('cotton')) || bentoProducts.find(p => p.category?.slug === 'tapes');
+            } else if (card.id === 'boxes') {
+              product = bentoProducts.find(p => p.category?.slug === 'boxes-cartons');
+            }
+            
+            // Stable fallback: use index to avoid hydration mismatch, ensuring it always has a background product
+            const index = essentials.findIndex(c => c.id === card.id);
+            if (!product && bentoProducts.length > index) {
+               product = bentoProducts[index];
+            } else if (!product && bentoProducts.length > 0) {
+               product = bentoProducts[0];
+            }
+
             const mainImage = product?.images?.[0]?.asset || product?.mainImage?.asset
             const imageUrl = mainImage ? urlFor(mainImage).width(600).url() : null
 
@@ -124,6 +144,7 @@ export default function FeaturedEssentialsBento({ bentoProducts = [] }: Featured
                 key={card.id}
                 variants={item}
                 className={`relative group ${card.colSpan} ${card.rowSpan}`}
+                suppressHydrationWarning
               >
                 <Link href={card.href} className="block w-full h-full">
                   <div className={`w-full h-full rounded-3xl p-8 border border-border-subtle bg-white hover:border-brand-primary/20 hover:shadow-2xl hover:shadow-brand-primary/5 transition-all duration-500 overflow-hidden relative flex flex-col`}>

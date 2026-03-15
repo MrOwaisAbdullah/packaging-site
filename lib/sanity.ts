@@ -240,7 +240,7 @@ export async function getProductBySlug(slug: string) {
  */
 export async function getBentoProducts() {
   return sanityFetch<any[]>(
-    `*[_type == "product" && category->slug.current in ["stretch-films", "bubble-wrap", "cotton-rolls", "boxes"]]{
+    `*[_type == "product" && category->slug.current in ["films-wraps", "foams-boards", "boxes-cartons", "tapes"]]{
       _id,
       name,
       "slug": slug.current,
